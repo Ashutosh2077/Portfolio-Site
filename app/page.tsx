@@ -1,61 +1,66 @@
-import { ArrowUpRight, ArrowDown, Play, Mail, Code2, Box, Layers, MoveUpRight } from 'lucide-react';
-
+"use client";
+import { useEffect, useRef, useState } from 'react';
+import { ArrowDown, ArrowUpRight, Flag, Gamepad2, GraduationCap, Code2, Mountain, Globe2, Joystick, Martini, Scan, Glasses, Sparkles } from 'lucide-react';
 const playlist = 'https://www.youtube.com/playlist?list=PLLY9yrVQ6BGI6hRnuLCrN-zt2yWUlgakR';
-const projects = [
-  { number: '01', type: '2D / PHYSICS ADVENTURE', title: 'From Chains\nto the Skies', idea: 'Every great climb starts with a little friction.', description: 'A 2D climbing adventure inspired by Getting Over It and Only Up. Physics-based movement turns each ascent into a challenge, while stylized levels give every attempt its own character.', focus: 'Physics-based movement · Level design · SDK integration', stack: ['Unity', 'C#', 'GitHub', 'Photopea'], className: 'climb' },
-  { number: '02', type: '3D / OPEN WORLD', title: 'Laila Majnu', idea: 'A familiar world. An unmistakably Indian story.', description: 'An open-world game inspired by GTA, with Bollywood-style storytelling at its heart. Lively NPCs, custom vehicles and landmarks like the Taj Mahal bring a culturally rich environment to life.', focus: 'NPC behaviour · Vehicle systems · World building', stack: ['Unity', 'C#', 'Blender', 'JSON'], className: 'world' },
-  { number: '03', type: 'HYPERCASUAL / SIMULATION', title: 'Arcade Sim', idea: 'Small decisions. A growing arcade empire.', description: 'An arcade management simulator built around a satisfying loop: place machines, manage resources, serve customers and expand. Customer AI and strategic progression turn a simple space into a growing business.', focus: 'Customer AI · Resource management · Strategic expansion', stack: ['Unity', 'AdMob', 'Blender'], className: 'arcade' },
+const chapters = [
+ { id:'origin', label:'The beginning', era:'2019 — 2023', title:'Every world starts\nwith a spark.', subtitle:'Engineering the foundation', text:'My journey starts at NIET, Greater Noida, studying Electronics & Communication Engineering. Learning how systems work became the foundation for imagining what I could build with them.', place:'B.Tech ECE · NIET Greater Noida', tags:['Engineering','Curiosity','Problem solving'], icon:GraduationCap, word:'BEGIN', color:'#66d9ff', kind:'ORIGIN STORY' },
+ { id:'engineering', label:'First checkpoint', era:'FEB — AUG 2023', title:'From learning\nto building.', subtitle:'Software Engineer Intern', text:'At Capgemini Engineering, I stepped into software engineering. Go, Docker, CI/CD and Linux gave me a new set of tools—and a closer look at how software comes together.', place:'Capgemini Engineering', tags:['Go','Docker','CI/CD','Linux','Vim'], icon:Code2, word:'BUILD', color:'#aaa1ff', kind:'CAREER CHECKPOINT' },
+ { id:'unity', label:'A new direction', era:'JAN 2024 — PRESENT', title:'The world became\nmy playground.', subtitle:'Unity Game Developer', text:'At VMS Techs, I build casual, mobile and PC games, alongside AR and VR experiences. Programming meets imagination through gameplay, real-world interactions and immersive environments.', place:'VMS Techs', tags:['Unity','C#','REST APIs','8th Wall','AR / VR'], icon:Gamepad2, word:'PLAY', color:'#ff92cc', kind:'CAREER CHECKPOINT' },
+ { id:'chains', label:'Chase the sky', era:'PROJECT 01 / 06', title:'From Chains\nto the Skies', subtitle:'What if the struggle was the fun?', text:'A 2D climbing adventure inspired by Getting Over It and Only Up. Physics-based movement challenges players to find their way through uniquely designed levels, wrapped in a stylized art direction.', place:'2D physics adventure', tags:['Unity','C#','GitHub','Photopea','SDK integration'], icon:Mountain, word:'CLIMB', color:'#66d9ff', kind:'PROJECT DISCOVERED' },
+ { id:'laila', label:'Build a world', era:'PROJECT 02 / 06', title:'Laila Majnu', subtitle:'An open world with an Indian heart.', text:'GTA-inspired freedom meets Bollywood-style storytelling. Lively NPCs, custom vehicles and landmarks such as the Taj Mahal bring a culturally rich, interactive environment to life.', place:'3D open-world game', tags:['Unity','C#','Blender','JSON'], icon:Globe2, word:'ROAM', color:'#ffba72', kind:'PROJECT DISCOVERED' },
+ { id:'arcade', label:'Find the loop', era:'PROJECT 03 / 06', title:'Arcade Sim', subtitle:'One machine. A whole lot of possibility.', text:'A hypercasual arcade management simulator built around machine placement, resource management, customer AI and strategic expansion. Each decision becomes part of a growing tycoon experience.', place:'Arcade management simulator', tags:['Unity','AdMob','Blender','Customer AI'], icon:Joystick, word:'GROW', color:'#b99aff', kind:'PROJECT DISCOVERED' },
+ { id:'cocktails', label:'Beyond the screen', era:'PROJECT 04 / 06', title:'Summer of\nCocktails', subtitle:'A menu becomes an experience.', text:'An interactive AR menu for multiple liquor brands. Guests can explore cocktails, recipes and preparation steps in an immersive format that brings a new dimension to the event experience.', place:'Augmented reality menu', tags:['8th Wall','Unity','JavaScript'], icon:Martini, word:'BLEND', color:'#ff92cc', kind:'PROJECT DISCOVERED' },
+ { id:'stag', label:'Reality, remixed', era:'PROJECT 05 / 06', title:'Royal Stag', subtitle:'Let the real world into the story.', text:'An interactive augmented reality world map blending 3D assets with real-world environments. Chroma key, models and animations turn exploration into a dynamic visual experience.', place:'Augmented reality experience', tags:['8th Wall','Unity','Blender','Chroma key'], icon:Scan, word:'MERGE', color:'#6ce6c3', kind:'PROJECT DISCOVERED' },
+ { id:'glow', label:'Step inside', era:'PROJECT 06 / 06', title:'Open Glow', subtitle:'The player is now inside the adventure.', text:'A VR thrill adventure with realistic visuals and immersive gameplay. Players navigate adrenaline-filled scenarios designed for Oculus devices, moving from watching a world to experiencing it.', place:'Virtual reality adventure', tags:['Unity','Oculus SDK','Blender'], icon:Glasses, word:'ENTER', color:'#aaa1ff', kind:'PROJECT DISCOVERED' },
 ];
-const immersive = [
-  { number: '04', type: 'AUGMENTED REALITY', title: 'Summer of Cocktails', description: 'A menu you can explore. An interactive AR experience for multiple liquor brands, bringing cocktail recipes and preparation steps into an immersive format for event attendees.', stack: ['8th Wall', 'Unity', 'JavaScript'] },
-  { number: '05', type: 'AUGMENTED REALITY', title: 'Royal Stag', description: 'A world map that comes to life. Blending 3D assets, animation and chroma key with real-world surroundings to create an interactive way to explore.', stack: ['8th Wall', 'Unity', 'Blender'] },
-  { number: '06', type: 'VIRTUAL REALITY', title: 'Open Glow', description: 'Step inside the adventure. A VR thrill experience with realistic visuals and immersive gameplay, built for players to navigate adrenaline-filled scenarios on Oculus devices.', stack: ['Unity', 'Oculus SDK', 'Blender'] },
-];
-export default function Home() {
-  return (
-    <>
-      <a className="skip" href="#main">Skip to content</a>
-      <header className="navigation">
-        <a href="#" className="brand" aria-label="Ashutosh Singh home">as<span>●</span></a>
-        <nav aria-label="Main navigation"><a href="#work">Selected work</a><a href="#story">My story</a><a href="#toolkit">Toolkit</a></nav>
-        <a className="nav-contact" href="#contact">Let’s talk <ArrowUpRight size={16}/></a>
-      </header>
-      <main id="main">
-        <section className="hero">
-          <div className="eyebrow"><span className="dot"/> ASHUTOSH SINGH <span className="divider">/</span> UNITY GAME DEVELOPER</div>
-          <h1>I build worlds.<br/><span>You bring them</span><br/><span className="accent">to life.</span><span className="heading-star" aria-hidden="true">✳</span></h1>
-          <div className="hero-bottom">
-            <p>From that one-more-try feeling to places you can step inside. I turn imaginative ideas into immersive gaming experiences.</p>
-            <a className="button" href="#work">Explore my work <ArrowDown size={18}/></a>
-          </div>
-          <div className="hero-foot"><span>GAMES. WORLDS. EXPERIENCES.</span><span>SCROLL TO EXPLORE ↓</span></div>
-        </section>
-        <section className="reel-section" aria-labelledby="reel-title">
-          <div className="reel-copy"><span className="eyebrow">THE WORK, IN MOTION</span><h2 id="reel-title">Less explaining.<br/>More experiencing.</h2><p>A collection of my project videos. See the mechanics, worlds and interactions in action.</p><a className="text-link" href={playlist} target="_blank" rel="noreferrer">Open the YouTube playlist <ArrowUpRight size={18}/></a></div>
-          <div className="reel"><div className="reel-top"><span><Play size={13}/> PROJECT PLAYLIST</span><span>UNITY / AR / VR</span></div><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=PLLY9yrVQ6BGI6hRnuLCrN-zt2yWUlgakR" title="Ashutosh Singh project video playlist" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/><p className="video-note">Player unavailable? <a href={playlist} target="_blank" rel="noreferrer">Watch on YouTube ↗</a></p></div>
-        </section>
-        <section id="work" className="work-section">
-          <div className="section-heading"><div><span className="eyebrow">CHAPTER 01 / FINDING THE FUN</span><h2>First, make it <em>play.</em></h2></div><p>Movement. Decisions. Discovery.<br/>Three different ways to keep a player curious.</p></div>
-          <div className="project-list">{projects.map(p => <article className={'project '+p.className} key={p.number}><div className="project-index"><span>{p.number}</span><MoveUpRight size={28} aria-hidden="true"/></div><div className="project-title"><span className="eyebrow">{p.type}</span><h3>{p.title}</h3><div className="tags">{p.stack.map(s=><span key={s}>{s}</span>)}</div></div><div className="project-copy"><h4>{p.idea}</h4><p>{p.description}</p><p className="focus">{p.focus}</p></div></article>)}</div>
-        </section>
-        <section className="immersive-section">
-          <div className="section-heading"><div><span className="eyebrow">CHAPTER 02 / BEYOND THE SCREEN</span><h2>Then, make it <em>real.</em></h2></div><p>What happens when the world<br/>becomes part of the experience?</p></div>
-          <div className="immersive-grid">{immersive.map(p=><article className="immersive-card" key={p.number}><div className="card-top"><span>{p.number}</span>{p.number==='06'?<Box size={30}/>:<Layers size={30}/>}</div><span className="eyebrow">{p.type}</span><h3>{p.title}</h3><p>{p.description}</p><div className="tags">{p.stack.map(s=><span key={s}>{s}</span>)}</div></article>)}</div>
-        </section>
-        <section id="story" className="story-section">
-          <div className="story-intro"><span className="eyebrow">CHAPTER 03 / THE PERSON BEHIND THE PLAY</span><h2>Curiosity is<br/>my game engine.</h2><p>I’m Ashutosh, a Unity game developer, creative problem solver and fast learner. My path has taken me from electronics and software engineering to building games and immersive experiences.</p><p>The thread connecting it all? Learning how things work, then imagining what else they could become.</p></div>
-          <div className="timeline">
-            <article><span className="timeline-date">JAN 2024 — PRESENT</span><h3>Unity Game Developer</h3><h4>VMS Techs</h4><p>Building casual, mobile and PC games alongside AR and VR experiences. Working with C#, REST APIs, Unity and 8th Wall.</p></article>
-            <article><span className="timeline-date">FEB 2023 — AUG 2023</span><h3>Software Engineer Intern</h3><h4>Capgemini Engineering</h4><p>A foundation in software engineering, working with Go, Docker, CI/CD, Linux and Vim.</p></article>
-            <article><span className="timeline-date">2019 — 2023</span><h3>B.Tech, Electronics & Communication</h3><h4>NIET, Greater Noida</h4><p>The engineering foundation behind my curiosity for systems, technology and interactive experiences.</p></article>
-          </div>
-        </section>
-        <section id="toolkit" className="toolkit-section"><div className="section-heading"><div><span className="eyebrow">THE TOOLS BEHIND THE WORLDS</span><h2>Ideas meet <em>execution.</em></h2></div><Code2 size={38} aria-hidden="true"/></div><div className="skills">
-          <div><span>01 / CODE & WEB</span><p>C# · C++ · JavaScript · Three.js</p></div><div><span>02 / ENGINES & IMMERSION</span><p>Unity · 8th Wall · AR & VR · MyWebAR</p></div><div><span>03 / 3D & DESIGN</span><p>Blender · Photoshop</p></div><div><span>04 / WORKFLOW & DATA</span><p>GitHub · Vim · MySQL · JSON</p></div>
-        </div></section>
-        <section id="contact" className="contact-section"><span className="eyebrow">THE NEXT CHAPTER</span><h2>Let’s build something<br/><em>worth playing.</em></h2><div className="contact-bottom"><p>Have a game, an experience or a role in mind?<br/>I’d love to hear about it.</p><a className="button" href="mailto:dineshaushutosh@gmail.com">Get in touch <Mail size={18}/></a></div><div className="contact-links"><a href="mailto:dineshaushutosh@gmail.com">dineshaushutosh@gmail.com <ArrowUpRight size={16}/></a><a href="tel:+919599471440">+91 9599471440 <ArrowUpRight size={16}/></a></div></section>
-      </main>
-      <footer><span>© {new Date().getFullYear()} Ashutosh Singh</span><span>IMAGINED. BUILT. PLAYED.</span><a href="#">Back to top ↑</a></footer>
-    </>
-  );
+export default function Home(){
+ const root=useRef<HTMLDivElement>(null);
+ const [active,setActive]=useState(-1);
+ const [progress,setProgress]=useState(0);
+ useEffect(()=>{
+  const scope=root.current;
+  if(!scope)return;
+  const scenes=Array.from(scope.querySelectorAll<HTMLElement>('[data-scene]'));
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
+  let frame=0;
+  const update=()=>{
+   frame=0;
+   const h=window.innerHeight;
+   const max=document.documentElement.scrollHeight-h;
+   setProgress(max>0?Math.min(100,Math.max(0,window.scrollY/max*100)):0);
+   let current=-1;
+   scenes.forEach((scene,i)=>{
+    const r=scene.getBoundingClientRect();
+    if(r.top<h*.55)current=i;
+    const entry=Math.max(0,Math.min(1,(h*.92-r.top)/(h*.6)));
+    scene.style.setProperty('--entry',String(reduce.matches?1:entry));
+   });
+   setActive(current);
+  };
+  const schedule=()=>{if(!frame)frame=requestAnimationFrame(update)};
+  update();
+  scope.classList.add('motion-ready');
+  window.addEventListener('scroll',schedule,{passive:true});
+  window.addEventListener('resize',schedule);
+  reduce.addEventListener('change',schedule);
+  return()=>{window.removeEventListener('scroll',schedule);window.removeEventListener('resize',schedule);reduce.removeEventListener('change',schedule);cancelAnimationFrame(frame)};
+ },[]);
+ const reached=Math.max(0,Math.min(6,active-2));
+ return <div ref={root} className="journey">
+ <a href="#origin" className="skip">Skip introduction</a>
+ <header className="hud"><a href="#start" className="brand"><Gamepad2 size={22}/> AS<span> / PLAYER ONE</span></a><div className="hud-progress"><span>STORY PROGRESS <b>{Math.round(progress)}%</b></span><div className="progress-track"><div style={{width:progress+'%'}}/></div></div><a href="#contact" className="contact-short">Next quest <ArrowUpRight size={16}/></a></header>
+ <aside className="chapter-map" aria-label="Journey checkpoints"><a href="#start" aria-label="Introduction" className={active<0?'current':''}><span className="map-dot"/><span className="map-label">START</span></a>{chapters.map((c,i)=><a key={c.id} href={'#'+c.id} aria-label={c.label} aria-current={active===i?'step':undefined} className={active===i?'current':active>i?'visited':''}><span className="map-dot"/><span className="map-label">{c.label}</span></a>)}<a href="#contact" aria-label="Contact"><Flag size={13}/></a></aside>
+ <main>
+ <section id="start" className="start-screen"><div className="orbit orbit-one" aria-hidden="true"/><div className="orbit orbit-two" aria-hidden="true"/><div className="start-copy"><div className="overline"><span className="live-dot"/> AN INTERACTIVE DEVELOPER STORY</div><p className="intro-name">ASHUTOSH SINGH</p><h1>Life is a journey.<br/>I make it <em>playable.</em></h1><p className="intro-description">Engineer. Game developer. World builder.<br/>Follow the checkpoints that shaped me—and discover the worlds I’ve built along the way.</p><a className="start-button" href="#origin">Begin the journey <ArrowDown size={20}/></a><span className="start-hint">SCROLL TO MOVE FORWARD</span></div><div className="start-footer"><span>01 PLAYER · 06 PROJECTS · ENDLESS CURIOSITY</span><span>UNITY / AR / VR</span></div></section>
+ <div className="timeline-world"><div className="world-line" aria-hidden="true"/>{chapters.map((c,i)=>{const Icon=c.icon;return <section id={c.id} data-scene key={c.id} className={'scene '+(i%2===0?'from-left':'from-right')} style={{'--scene-color':c.color} as React.CSSProperties}>
+ <div className="checkpoint" aria-hidden="true"><span>{String(i+1).padStart(2,'0')}</span></div>
+ <div className="scene-art" aria-hidden="true"><span className="ghost-word">{c.word}</span><div className="icon-orbit"><Icon strokeWidth={1} size={85}/></div><span className="art-caption">{c.era}</span></div>
+ <article className="scene-card"><div className="card-meta"><span>{c.kind}</span><span>{String(i+1).padStart(2,'0')} / 09</span></div><span className="era">{c.era}</span><h2>{c.title}</h2><h3>{c.subtitle}</h3><p>{c.text}</p><div className="place"><Icon size={16}/>{c.place}</div><div className="tags">{c.tags.map(t=><span key={t}>{t}</span>)}</div>{i>=3&&<a className="project-link" href="#showreel">Explore the project playlist <ArrowDown size={16}/></a>}<div className="checkpoint-status"><span>✦</span> {c.kind==='PROJECT DISCOVERED'?'WORLD EXPLORED':'CHECKPOINT REACHED'}</div></article>
+ </section>})}</div>
+ <section id="toolkit" className="inventory"><div className="overline">YOUR DEVELOPER’S INVENTORY</div><h2>Skills collected.<br/><em>Possibilities unlocked.</em></h2><div className="inventory-grid">{[{name:'Code & web',items:'C# · C++ · JavaScript · Three.js',icon:Code2},{name:'Engines & immersion',items:'Unity · 8th Wall · AR & VR · MyWebAR',icon:Gamepad2},{name:'Art & design',items:'Blender · Photoshop',icon:Sparkles},{name:'Workflow & data',items:'GitHub · Vim · MySQL · JSON',icon:LayersIcon}].map((s,i)=><div className="inventory-item" key={s.name}><s.icon size={24}/><span className="overline">SLOT 0{i+1}</span><h3>{s.name}</h3><p>{s.items}</p></div>)}</div></section>
+ <section id="showreel" className="showreel"><div className="overline">BONUS LEVEL / THE WORLDS IN MOTION</div><h2>Now watch them <em>come alive.</em></h2><p>Explore the gameplay and immersive experiences in my project playlist.</p><div className="video-frame"><div className="video-bar"><span><span className="live-dot"/> PROJECT ARCHIVE</span><a href={playlist} target="_blank" rel="noreferrer">Open YouTube ↗</a></div><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/videoseries?list=PLLY9yrVQ6BGI6hRnuLCrN-zt2yWUlgakR" title="Ashutosh Singh project playlist" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/></div><p className="fallback">If the player doesn’t load, <a href={playlist} target="_blank" rel="noreferrer">watch the playlist on YouTube ↗</a></p></section>
+ <section id="contact" className="final-level"><Flag size={38}/><div className="overline">STORY STILL IN PROGRESS</div><h2>The next chapter?<br/><em>Let’s build it together.</em></h2><p>A new game. An immersive experience. A team with a big idea.<br/>I’m ready to hear what you have in mind.</p><a className="start-button" href="mailto:dineshaushutosh@gmail.com">Start our next quest <ArrowUpRight size={20}/></a><div className="contact-links"><a href="mailto:dineshaushutosh@gmail.com">dineshaushutosh@gmail.com</a><a href="tel:+919599471440">+91 9599471440</a></div><a href="#start" className="replay">↺ Replay the journey</a></section>
+ </main><footer><span>ASHUTOSH SINGH</span><span>Turning imaginative ideas into immersive gaming experiences.</span></footer><div className="quest-status" aria-hidden="true"><span className="live-dot"/>{active<0?'YOUR JOURNEY AWAITS':chapters[Math.min(active,8)].label.toUpperCase()}<span className="quest-count">{reached}/6 WORLDS</span></div>
+ </div>
 }
+function LayersIcon({size=24}:{size?:number}){return <Code2 size={size}/>}
