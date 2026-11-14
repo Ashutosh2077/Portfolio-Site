@@ -6,7 +6,7 @@ import HoverVideo from './hover-video';
 import Sticker, { type StickerName } from './sticker';
 import Loader from './loader';
 import { archive, heroStats, links, memories, milestones, projects, roles, skillGroups, toolbox, type Project } from './content';
-import { asset } from './asset';
+import { asset, HERO_NAME_SIZES, HERO_NAME_SRCSET } from './asset';
 
 const NAV = [
  { id: 'top', label: 'Home' },
@@ -139,7 +139,7 @@ export default function Home() {
     <Sticker name="coin" className="deco d-coin" />
 
     <div className="hero-title">
-     <h1 className="hero-name"><span className="sr-only">Ashutosh Singh</span><img src={asset('/images/hero-name.webp')} alt="" aria-hidden="true" className="hero-name-img" width={1468} height={763} fetchPriority="high" decoding="async" /><Sticker name="crown" className="name-crown" /></h1>
+     <h1 className="hero-name"><span className="sr-only">Ashutosh Singh</span><img src={asset('/images/hero-name.webp')} srcSet={HERO_NAME_SRCSET} sizes={HERO_NAME_SIZES} alt="" aria-hidden="true" className="hero-name-img" width={1468} height={763} fetchPriority="high" decoding="async" /><Sticker name="crown" className="name-crown" /></h1>
      <p className="tagline"><span>I make</span> <span className="u">games.</span></p>
     </div>
 

@@ -4,7 +4,9 @@
    A deliberately single, light, cheerful theme. Layout: full-bleed bands, content in a 1180px column. */
 :root{
  --sun:#FFDE6A;--sun-deep:#F7CD3E;--cream:#FFF5D2;--white:#FFFFFF;
- --ink:#1B1340;--ink-soft:#4A4266;--muted:#6B6385;
+ --ink:#1B1340;--ink-soft:#4A4266;--muted:#544C6E;
+ /* deeper coral for text and text backgrounds (readable at WCAG AA); bright coral stays for decoration */
+ --coral-deep:#C8162F;--blue-deep:#1340C8;
  --coral:#FF4B5C;--blue:#1F5BFF;--mint:#2FD9A0;--grape:#8B5CF6;
  --font-display:'Baloo 2','Arial Rounded MT Bold','Trebuchet MS',system-ui,sans-serif;
  --font-body:'Nunito','Segoe UI',system-ui,sans-serif;
@@ -34,7 +36,7 @@ img{max-width:100%}
 h2{font:800 clamp(2.4rem,5vw,4rem)/1 var(--font-display);letter-spacing:-.01em;text-wrap:balance}
 h3{font:800 1.7rem/1.15 var(--font-display)}
 .label{display:inline-block;font:800 14px/1 var(--font-display);letter-spacing:.08em;text-transform:uppercase;background:var(--ink);color:var(--sun);padding:8px 12px 6px;border-radius:999px;margin-bottom:14px}
-.hl{position:relative;color:var(--coral);white-space:nowrap}
+.hl{position:relative;color:var(--coral-deep);white-space:nowrap}
 .hl::after{content:"";position:absolute;left:4%;right:2%;bottom:-.02em;height:.14em;border-radius:99px;background:var(--coral);transform:rotate(-2deg);opacity:.9}
 
 /* ---------- buttons ---------- */
@@ -49,7 +51,7 @@ h3{font:800 1.7rem/1.15 var(--font-display)}
 .chip-btn{padding:10px 18px 8px;border-radius:999px;border:var(--line);background:#fff;font:700 16px/1.1 var(--font-display);box-shadow:0 4px 0 var(--ink);transition:transform .15s,box-shadow .15s,background .15s}
 .chip-btn:hover{transform:translateY(2px);box-shadow:0 2px 0 var(--ink)}
 .chip-btn.is-active{background:var(--ink);color:var(--sun)}
-.link{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:var(--blue);border-bottom:3px solid currentColor}
+.link{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:var(--blue-deep);border-bottom:3px solid currentColor}
 
 /* ---------- top bar ---------- */
 /* floating "game HUD" bar: white card, ink outline, chunky shadow, inset from the screen edges */
@@ -374,6 +376,7 @@ a.social:hover{transform:translateY(2px);box-shadow:0 3px 0 var(--ink);backgroun
 }
 /* ---------- full-page loader ---------- */
 html.is-loading{overflow:hidden}
+html.skip-loader .loader{display:none}
 .loader{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:20px;background:var(--sun);
  background-image:radial-gradient(#1b134014 2px,transparent 2px);background-size:28px 28px;
  animation:loaderFailsafe .3s ease 8s forwards;transition:opacity .45s ease,transform .55s cubic-bezier(.6,-.3,.7,.4)}

@@ -14,6 +14,8 @@
     "build:pages": "vinext build && node scripts/pages-postbuild.mjs"
   },
   "dependencies": {
+    "@fontsource/baloo-2": "^5.2.6",
+    "@fontsource/nunito": "^5.2.7",
     "lucide-react": "1.31.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",

@@ -10,46 +10,53 @@ const TIPS = [
 ];
 
 /**
- * Full-page "Loading level 1" screen. Progress follows real image loading.
- * Safety: it shows for at least ~0.9s (so it doesn't flash) and at most 6s, and CSS hides it on its own
- * after 8s even if JavaScript never runs.
+ * Full-page "Loading level 1" screen. It waits only for what the first screen needs (the hero photo,
+ * the name image and the fonts), not for every image on the page.
+ * - at least ~0.45s so it doesn't flash, at most 2.5s
+ * - shown once per browser session: an inline script in the layout hides it before first paint on repeat visits
+ * - CSS hides it on its own after 8s even if JavaScript never runs
  */
+const LOADER_SEEN_KEY = 'as-loader-seen'; // also read by the inline script in layout.tsx
+
 export default function Loader() {
  const [pct, setPct] = useState(0);
  const [phase, setPhase] = useState<'loading' | 'ready' | 'gone'>('loading');
  const [tip, setTip] = useState(0);
 
  useEffect(() => {
+  if (document.documentElement.classList.contains('skip-loader')) { setPhase('gone'); return; }
+  try { sessionStorage.setItem(LOADER_SEEN_KEY, '1'); } catch { /* storage blocked: just show it */ }
   const start = performance.now();
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.documentElement.classList.add('is-loading');
-  let shown = 0, raf = 0, finished = false;
+  let shown = 0, raf = 0, finished = false, fontsReady = false;
+  document.fonts?.ready.then(() => { fontsReady = true; });
 
+  // the first-screen images are the ones marked high priority
   const target = () => {
-   const imgs = Array.from(document.images).filter(i => i.loading !== 'lazy');
+   const imgs = Array.from(document.images).filter(i => i.getAttribute('fetchpriority') === 'high');
    const done = imgs.filter(i => i.complete).length;
-   return imgs.length ? done / imgs.length : 1;
+   return (imgs.length ? done / imgs.length : 1) * (fontsReady ? 1 : 0.9);
   };
   const finish = () => {
    if (finished) return;
    finished = true;
    setPct(100);
    setPhase('ready');
-   window.setTimeout(() => { setPhase('gone'); document.documentElement.classList.remove('is-loading'); }, reduce ? 150 : 650);
+   window.setTimeout(() => { setPhase('gone'); document.documentElement.classList.remove('is-loading'); }, reduce ? 100 : 450);
   };
   const tick = () => {
    const t = performance.now() - start;
    // ease the counter toward the real progress, never faster than the minimum show time
-   const goal = Math.min(target(), t / 900) * 100;
-   shown += (goal - shown) * 0.12;
+   const goal = Math.min(target(), t / 450) * 100;
+   shown += (goal - shown) * 0.22;
    setPct(Math.min(99, Math.round(shown)));
-   const allLoaded = document.readyState === 'complete' && target() >= 1;
-   if ((allLoaded && t > 900 && shown > 96) || t > 6000) { finish(); return; }
+   if ((target() >= 1 && t > 450 && shown > 94) || t > 2500) { finish(); return; }
    raf = requestAnimationFrame(tick);
   };
   raf = requestAnimationFrame(tick);
   // timers keep working even where animation frames are paused
-  const hardStop = window.setTimeout(finish, 6500);
+  const hardStop = window.setTimeout(finish, 2700);
   const tipTimer = window.setInterval(() => setTip(v => (v + 1) % TIPS.length), 1800);
   return () => { cancelAnimationFrame(raf); window.clearTimeout(hardStop); window.clearInterval(tipTimer); document.documentElement.classList.remove('is-loading'); };
  }, []);
