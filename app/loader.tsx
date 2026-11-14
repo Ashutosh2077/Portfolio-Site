@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
+import { asset } from './asset';
 
 const TIPS = [
  'Tip: hover over Ashutosh to see his stats.',
@@ -60,11 +61,11 @@ export default function Loader() {
  return <div className={'loader' + (phase === 'ready' ? ' is-ready' : '')} role="status" aria-live="polite" aria-label={phase === 'ready' ? 'Ready' : `Loading ${pct}%`}>
   <div className="loader-card">
    <div className="loader-hero">
-    <img src="/images/stickers/controller.webp" alt="" className="loader-pad" />
+    <img src={asset('/images/stickers/controller.webp')} alt="" className="loader-pad" />
     <span className="loader-shadow" />
-    <img src="/images/stickers/star.webp" alt="" className="loader-star s1" />
-    <img src="/images/stickers/coin.webp" alt="" className="loader-star s2" />
-    <img src="/images/stickers/star-blue.webp" alt="" className="loader-star s3" />
+    <img src={asset('/images/stickers/star.webp')} alt="" className="loader-star s1" />
+    <img src={asset('/images/stickers/coin.webp')} alt="" className="loader-star s2" />
+    <img src={asset('/images/stickers/star-blue.webp')} alt="" className="loader-star s3" />
    </div>
    <p className="loader-title">{phase === 'ready' ? 'Ready!' : 'Loading level 1'}<span className="dots" aria-hidden="true">{phase === 'ready' ? '' : '...'}</span></p>
    <div className="loader-bar" aria-hidden="true">

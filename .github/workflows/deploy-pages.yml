@@ -1,0 +1,54 @@
+name: Deploy to GitHub Pages
+
+# Builds the static site and publishes it on every push to main (or by hand from the Actions tab).
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Project sites live at /<repo-name>/; a "<user>.github.io" repo lives at the domain root.
+      - name: Work out the base path
+        run: |
+          repo="${{ github.event.repository.name }}"
+          if [[ "$repo" == *.github.io ]]; then echo "PAGES_BASE_PATH=" >> "$GITHUB_ENV"; else echo "PAGES_BASE_PATH=/$repo" >> "$GITHUB_ENV"; fi
+
+      - name: Build static site
+        run: npm run build:pages
+        env:
+          STATIC_EXPORT: '1'
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site-out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

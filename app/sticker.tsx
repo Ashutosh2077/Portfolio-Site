@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
+import { asset } from './asset';
 
 /**
  * A cut-out sticker from /public/images/stickers/<name>.webp.
@@ -16,5 +17,5 @@ export default function Sticker({ name, className, fallback = null, alt = '', sr
  useEffect(() => { const el = img.current; if (el && el.complete && el.naturalWidth === 0) setMissing(true); }, []);
  if (missing) return <>{fallback}</>;
  // lazy + async decode: stickers on screen still load right away, the rest wait until they are near the viewport
- return <img ref={img} src={src || `/images/stickers/${name}.webp`} alt={alt} aria-hidden={alt ? undefined : true} className={'sticker ' + (className || '')} draggable={false} loading="lazy" decoding="async" onError={() => setMissing(true)} />;
+ return <img ref={img} src={src || asset(`/images/stickers/${name}.webp`)} alt={alt} aria-hidden={alt ? undefined : true} className={'sticker ' + (className || '')} draggable={false} loading="lazy" decoding="async" onError={() => setMissing(true)} />;
 }

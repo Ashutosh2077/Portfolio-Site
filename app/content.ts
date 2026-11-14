@@ -1,3 +1,4 @@
+import { asset } from './asset';
 // All site copy lives here so it can be edited without touching layout code.
 // Links set to null render as "coming soon" until a real URL is added.
 
@@ -73,7 +74,7 @@ export const projects: Project[] = [
    'I handled the complete production: gameplay architecture, world building, optimisation for Android devices and monetisation.',
   ],
   tags: ['Unity', 'C#', 'Blender', 'JSON', 'Android', 'Monetisation'],
-  groups: ['games'], image: '/images/LailaMajnuStreetsOfCrime.webp', video: 'nvcBKJKIMOs',
+  groups: ['games'], image: asset('/images/LailaMajnuStreetsOfCrime.webp'), video: 'nvcBKJKIMOs',
   links: [], status: 'Released November 2026', featured: true,
  },
  {
@@ -116,7 +117,7 @@ export const projects: Project[] = [
   short: 'An arcade management simulator, live on Google Play.',
   body: ['Machine placement, resource management, customer AI and strategic expansion. Every decision grows your arcade.'],
   tags: ['Unity', 'AdMob', 'Blender', 'Customer AI'],
-  groups: ['games'], image: '/images/arcade-sim-icon.webp',
+  groups: ['games'], image: asset('/images/arcade-sim-icon.webp'),
   links: [{ href: links.arcadePlayStore, label: 'Get it on Google Play' }],
  },
 ];
@@ -153,11 +154,11 @@ export const skillGroups: { name: string; skills: Skill[] }[] = [
 export const toolbox = ['C#', 'C++', 'JavaScript', 'Go', 'Three.js', 'Unity', '8th Wall', 'MyWebAR', 'Oculus SDK', 'Blender', 'Photoshop', 'Git', 'GitLab', 'Docker', 'Linux', 'Vim', 'MySQL', 'JSON'];
 
 export const memories = [
- { src: '/images/niet-college.webp', caption: 'NIET, 2019', note: 'Where the engineering started.' },
- { src: '/images/first-laptop.webp', caption: 'First laptop, 2021', note: 'One week later, my first game.' },
- { src: '/images/circle-eater.webp', caption: 'The Circle Eater', note: 'My first release and first game jam.' },
- { src: '/images/Capgemini.webp', caption: 'Capgemini, 2023', note: 'My first big team.' },
- { src: '/images/vms-tech-fulltime-office.webp', caption: 'VMS Techs', note: 'Making games became the day job.' },
+ { src: asset('/images/niet-college.webp'), caption: 'NIET, 2019', note: 'Where the engineering started.' },
+ { src: asset('/images/first-laptop.webp'), caption: 'First laptop, 2021', note: 'One week later, my first game.' },
+ { src: asset('/images/circle-eater.webp'), caption: 'The Circle Eater', note: 'My first release and first game jam.' },
+ { src: asset('/images/Capgemini.webp'), caption: 'Capgemini, 2023', note: 'My first big team.' },
+ { src: asset('/images/vms-tech-fulltime-office.webp'), caption: 'VMS Techs', note: 'Making games became the day job.' },
 ];
 
 // Info cards that pop out around the hero photo on hover (always shown on phones).
