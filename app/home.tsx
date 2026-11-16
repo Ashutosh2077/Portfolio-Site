@@ -5,13 +5,17 @@ import { blip, cascade, loadMuted, pop, setMuted, unlock } from './sfx';
 import HoverVideo from './hover-video';
 import Sticker, { type StickerName } from './sticker';
 import Loader from './loader';
-import { archive, heroStats, links, memories, milestones, projects, roles, skillGroups, toolbox, type Project } from './content';
+import DeepDives from './deep-dives';
+import SkillsSection from './skills-section';
+import { archive, heroStats, links, memories, milestones, projects, roles, type Project } from './content';
 import { asset, HERO_NAME_SIZES, HERO_NAME_SRCSET } from './asset';
 
 const NAV = [
  { id: 'top', label: 'Home' },
  { id: 'about', label: 'About' },
  { id: 'projects', label: 'Projects' },
+ { id: 'skills', label: 'Skills' },
+ { id: 'lab', label: 'Deep dives' },
  { id: 'experience', label: 'Experience' },
 ];
 const FILTERS = [
@@ -32,13 +36,12 @@ const STAT_ICON: Record<string, { sticker: StickerName; icon: React.ReactNode }>
 };
 
 // sticker shown on project cards until real screenshots are added
-const PLACEHOLDER: Record<string, StickerName> = { quiz: 'mystery-box', vr: 'rocket', 'ar-map': 'target', 'ar-menu': 'star-blue' };
+const PLACEHOLDER: Record<string, StickerName> = { vr: 'rocket', 'ar-map': 'target', 'ar-menu': 'star-blue' };
 
 export default function Home() {
  const [section, setSection] = useState('top');
  const [peek, setPeek] = useState(false);
  const [filter, setFilter] = useState<FilterId>('all');
- const [skill, setSkill] = useState('unity');
  const [project, setProject] = useState<Project | null>(null);
  const [copied, setCopied] = useState(false);
  const [hasPhoto, setHasPhoto] = useState(true);
@@ -102,7 +105,6 @@ export default function Home() {
  const featured = projects.find(p => p.featured)!;
  const matches = (p: Project) => filter === 'all' || p.kind === filter || p.groups.includes(filter as 'games' | 'xr');
  const shown = useMemo(() => projects.filter(p => !p.featured && (filter === 'all' || p.kind === filter || p.groups.includes(filter as 'games' | 'xr'))), [filter]);
- const activeSkill = skillGroups.flatMap(g => g.skills).find(s => s.id === skill)!;
 
  const copyEmail = async () => {
   try { await navigator.clipboard.writeText(links.email); setCopied(true); setTimeout(() => setCopied(false), 1800); }
@@ -204,22 +206,6 @@ export default function Home() {
       <ol>{milestones.map(m => <li key={m.title}><span className="lv-year">{m.year}</span><b>{m.title}</b><small>{m.note}</small></li>)}</ol>
      </div>
 
-     <div className="skills" data-pop>
-      <h3><Sticker name="layers" className="h-sticker" /> Skills <small>Pick one to see where I used it</small></h3>
-      <div className="skills-grid">
-       <div className="skill-chips">
-        {skillGroups.flatMap(g => g.skills).map(s => <button key={s.id} type="button" aria-pressed={skill === s.id} className={'chip-btn' + (skill === s.id ? ' is-active' : '')} onClick={() => setSkill(s.id)}>{s.name}</button>)}
-       </div>
-       <div className="card skill-detail" aria-live="polite" key={activeSkill.id}>
-        <b>{activeSkill.name}</b>
-        <p>{activeSkill.note}</p>
-        <ul>{activeSkill.projects.map(id => { const p = projects.find(x => x.id === id)!; return <li key={id}><button type="button" onClick={() => setProject(p)}>{p.title} <ArrowUpRight size={15} /></button></li>; })}
-         {activeSkill.id === 'devops' && <li className="muted">Capgemini Engineering, 2023</li>}
-        </ul>
-       </div>
-      </div>
-      <ul className="toolbox">{toolbox.map(t => <li key={t}>{t}</li>)}</ul>
-     </div>
 
      <div className="memories" data-pop>
       {memories.map((m, i) => <figure key={m.src} className="polaroid" style={{ '--tilt': `${[-4, 3, -2, 4, -3][i]}deg` } as React.CSSProperties}>
@@ -273,6 +259,20 @@ export default function Home() {
       <p className="muted">Hover a preview to play it. Tap on phones.</p>
       <div className="archive-row">{archive.map(v => <HoverVideo key={v.id} id={v.id} title={v.title} portrait={v.portrait} className={'card archive-item' + (v.portrait ? ' portrait' : '')} />)}</div>
      </div>
+    </div>
+   </section>
+
+   {/* SKILLS */}
+   <SkillsSection onOpenProject={setProject} />
+
+   {/* DEEP DIVES */}
+   <section id="lab" className="lab">
+    <div className="wrap">
+     <div className="sec-head" data-pop>
+      <Sticker name="rocket" className="sec-sticker" />
+      <div><p className="label">Deep dives</p><h2>How I make big worlds run on <span className="hl">small phones.</span></h2></div>
+     </div>
+     <DeepDives onOpenProject={setProject} />
     </div>
    </section>
 
