@@ -8,8 +8,55 @@ import { asset } from './asset';
 export default function DeepDives({ onOpenProject }: { onOpenProject: (p: Project) => void }) {
  return <>
   <FrameBudget />
+  <OptimizationPlaybook />
   {caseStudies.map(c => <CaseBlock key={c.id} c={c} onOpenProject={onOpenProject} />)}
  </>;
+}
+
+/* ---------- 5-phase visual optimization playbook ---------- */
+function OptimizationPlaybook() {
+ return <div className="card opt-playbook" data-pop>
+  <div className="opt-playbook-head">
+   <p className="kind">The 60 FPS Roadmap</p>
+   <h3>How I Got a Massive Open-World City to Run on Budget Phones</h3>
+   <p className="opt-playbook-desc">
+    Low-end mobile GPUs throttle aggressively under draw calls and fill rate.
+    Here is the exact step-by-step optimization strategy I used on <i>Laila Majnu: Streets of Crime</i> to achieve locked 60 FPS without boring code.
+   </p>
+  </div>
+  <div className="opt-steps-grid">
+   <div className="opt-step-card tone-coral">
+    <span className="opt-step-badge">Phase 01</span>
+    <h4>Profile First, Don&apos;t Guess</h4>
+    <p>Connected an actual budget device (Redmi 9 / Mali-G52) to the Unity Profiler &amp; Frame Debugger. Discovered CPU stalls at 26.5 ms waiting on 850+ unbatched draw calls.</p>
+    <div className="opt-step-tag">Tool: Unity Profiler &amp; Frame Debugger</div>
+   </div>
+   <div className="opt-step-card tone-grape">
+    <span className="opt-step-badge">Phase 02</span>
+    <h4>Atlas Textures &amp; Merge Materials</h4>
+    <p>Consolidated 48 separate materials and textures across buildings and street props into 1 high-efficiency atlas. Remapped UVs in Blender so Unity batches them in single draw passes.</p>
+    <div className="opt-step-tag">Cut: 93% Draw Calls (120 → 8)</div>
+   </div>
+   <div className="opt-step-card tone-blue">
+    <span className="opt-step-badge">Phase 03</span>
+    <h4>Multi-Tier Culling Stack</h4>
+    <p>Layered camera Frustum Culling with baked Occlusion Culling (hiding geometry blocked behind front buildings) and aggressive distance culling on minor props.</p>
+    <div className="opt-step-tag">Culled: 70%+ Hidden Geometry</div>
+   </div>
+   <div className="opt-step-card tone-mint">
+    <span className="opt-step-badge">Phase 04</span>
+    <h4>Mesh LODs &amp; Vertex Budget</h4>
+    <p>Generated 3-level LOD (Level of Detail) meshes. Distant buildings swap to low-poly hulls, dropping total scene triangles from 950,000 down to 140,000 without visible pop-in.</p>
+    <div className="opt-step-tag">Saved: 85% Scene Triangles</div>
+   </div>
+   <div className="opt-step-card tone-coral">
+    <span className="opt-step-badge">Phase 05</span>
+    <h4>Static Batching &amp; Baked Lighting</h4>
+    <p>Pre-baked global illumination and soft shadows into lightmaps in the Unity Editor, stripping expensive realtime dynamic lights and enabling static batching across city blocks.</p>
+    <div className="opt-step-tag">Result: 28 FPS → 60 FPS Locked</div>
+   </div>
+  </div>
+ </div>;
 }
 
 /* ---------- frame budget toy: drag CPU/GPU ms and see what frame rate you get ---------- */

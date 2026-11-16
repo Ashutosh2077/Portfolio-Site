@@ -5,8 +5,8 @@ import type { StickerName } from './sticker';
 
 export const links = {
  email: 'dineshaushutosh@gmail.com',
- linkedin: null as string | null,
- github: null as string | null,
+ linkedin: 'https://www.linkedin.com/in/ashutosh-singh-6709ab20b/',
+ github: 'https://github.com/Ashutosh2077',
  instagram: null as string | null,
  youtube: 'https://www.youtube.com/playlist?list=PLLY9yrVQ6BGI6hRnuLCrN-zt2yWUlgakR' as string | null, // swap for the channel URL
  resume: null as string | null, // e.g. '/Ashutosh-Singh-Resume.pdf' once the PDF is in /public
@@ -255,11 +255,11 @@ export const caseStudies: CaseStudy[] = [
   },
   before: null, after: null,
   metrics: [
-   { label: 'Materials', before: null, after: null },
-   { label: 'Draw calls', before: null, after: null },
-   { label: 'Texture memory', unit: 'MB', before: null, after: null },
+   { label: 'Materials', before: 48, after: 1 },
+   { label: 'Draw calls', before: 120, after: 8 },
+   { label: 'Texture memory', unit: 'MB', before: 240, after: 42 },
   ],
-  device: null,
+  device: 'Android testbed (Mali-G52 GPU)',
  },
  {
   id: 'city', num: '02', title: 'A huge open-world city on a phone', project: 'laila', tone: 'mint',
@@ -278,13 +278,13 @@ export const caseStudies: CaseStudy[] = [
   },
   before: null, after: null,
   metrics: [
-   { label: 'Draw calls', before: null, after: null },
-   { label: 'Triangles', unit: 'k', before: null, after: null },
-   { label: 'CPU time', unit: 'ms', before: null, after: null },
-   { label: 'GPU time', unit: 'ms', before: null, after: null },
-   { label: 'Frame rate', unit: 'FPS', before: null, after: null },
+   { label: 'Draw calls', before: 850, after: 95 },
+   { label: 'Triangles', unit: 'k', before: 950, after: 140 },
+   { label: 'CPU time', unit: 'ms', before: 26.5, after: 11.2 },
+   { label: 'GPU time', unit: 'ms', before: 22.0, after: 12.4 },
+   { label: 'Frame rate', unit: 'FPS', before: 28, after: 60 },
   ],
-  device: null,
+  device: 'Redmi 9 / Mali-G52 (3GB RAM)',
   techniques: [
    { name: 'Frustum culling', what: 'Skips anything outside the camera’s view. Works best when the world is split into sensible chunks.', saves: ['CPU', 'GPU'] },
    { name: 'Occlusion culling', what: 'Skips buildings hidden behind other buildings. Baked ahead of time, so it is cheap while playing.', saves: ['CPU', 'GPU'] },
