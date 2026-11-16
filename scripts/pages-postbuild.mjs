@@ -26,6 +26,8 @@ const walk = dir => {
     const s = fs.readFileSync(p, 'utf8');
     const t = s
       .replace(/(["'(`\s=])\/_next\//g, `$1${base}/_next/`)
+      // vinext's page data tags chunk paths with a one-letter kind: "m/_next/..." (module), "p/_next/..." (preload)
+      .replace(/(["'`])([a-z])\/_next\//g, `$1$2${base}/_next/`)
       // Vite's preload helper builds chunk URLs as "/" + "_next/static/..."; give it the sub-folder
       .replace(/function\((\w+)\)\{return`\/`\+\1\}/g, `function($1){return\`${base}/\`+$1}`)
       .replace(/function\((\w+)\)\{return"\/"\+\1\}/g, `function($1){return"${base}/"+$1}`);
